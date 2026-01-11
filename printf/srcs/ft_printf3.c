@@ -6,7 +6,7 @@
 /*   By: ade-sarr <ade-sarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 22:49:05 by ade-sarr          #+#    #+#             */
-/*   Updated: 2026/01/11 23:02:47 by ade-sarr         ###   ########.fr       */
+/*   Updated: 2026/01/11 23:55:24 by ade-sarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,5 @@ int	ft_dprintf(int fd, const char *format, ...)
 
 int	ft_vprintf(const char *format, va_list args)
 {
-	ft_vdprintf(1, format, args);
+	return ft_vdprintf(1, format, args);
 }

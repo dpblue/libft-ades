@@ -8,6 +8,7 @@ PATH_SRCS = srcs/
 
 SRCS += ft_printf.c
 SRCS += ft_printf2.c
+SRCS += ft_printf3.c
 SRCS += ft_sprintf.c
 SRCS += ft_sprintf2.c
 SRCS += ft_atoi.c

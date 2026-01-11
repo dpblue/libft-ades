@@ -6,11 +6,12 @@
 /*   By: ade-sarr <ade-sarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 21:42:58 by ade-sarr          #+#    #+#             */
-/*   Updated: 2026/01/11 22:35:48 by ade-sarr         ###   ########.fr       */
+/*   Updated: 2026/01/11 23:48:38 by ade-sarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_str_nbr.h"
+#include <stdlib.h>
 
 /* Variante de ft_strlcpy() : renvoie la longueur copiée
 */

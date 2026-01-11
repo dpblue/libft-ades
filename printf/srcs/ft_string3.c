@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string3.c                                          :+:      :+:    :+:   */
+/*   ft_string3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-sarr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ade-sarr <ade-sarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 21:42:58 by ade-sarr          #+#    #+#             */
-/*   Updated: 2024/02/25 21:43:08 by ade-sarr         ###   ########.fr       */
+/*   Updated: 2026/01/11 22:35:48 by ade-sarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_str_nbr.h"
+
 /* Variante de ft_strlcpy() : renvoie la longueur copiée
 */
-unsigned int	ft_strlencpy(char *dest, const char *src, unsigned int size)
+size_t	ft_strlencpy(char *dest, const char *src, size_t size)
 {
-	int	n;
-	int	l;
+	size_t	n;
+	size_t	l;
 
 	l = 0;
 	if (size > 0)
@@ -34,9 +36,9 @@ unsigned int	ft_strlencpy(char *dest, const char *src, unsigned int size)
 
 /* Copie <src> dans <dest> et renvoie la longueur de <dest>
 */
-unsigned int	ft_strcpylen(char *dest, const char *src)
+size_t	ft_strcpylen(char *dest, const char *src)
 {
-	int	l;
+	size_t	l;
 
 	l = 0;
 	while (*src)
@@ -46,4 +48,16 @@ unsigned int	ft_strcpylen(char *dest, const char *src)
 	}
 	*dest = '\0';
 	return (l);
+}
+
+/* idem strlcpy mais avec un entier qui sera conertit en string comme source
+*/
+size_t	ft_strlcpynum(char *dst, int num, size_t size)
+{
+	size_t	ret;
+	char *const	snum = ft_itoa_m(num);
+
+	ret = ft_strlcpy(dst, snum, size);
+	free(snum);
+	return (ret);
 }

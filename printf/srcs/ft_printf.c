@@ -24,10 +24,10 @@ int	print_c(int c, t_format_id *fid)
 	if (c == 0 && fid->min_width > 0)
 		fid->min_width--;
 	if (c == 0 && fid->left_justify)
-		count += write(1, str, 1);
+		count += write(fid->fd_out, str, 1);
 	count += print_s((char *)str, fid);
 	if (c == 0 && !fid->left_justify)
-		count += write(1, str, 1);
+		count += write(fid->fd_out, str, 1);
 	return (count);
 }
 
@@ -38,7 +38,8 @@ int	print_p(uint64_t ptr64, t_format_id *fid, t_i2s_fmt *fmt, char *sbuf)
 		fid->max_width = -1;
 		return (print_s("(nil)", fid));
 	}
-	return (print(ft_ultoa_ex(ptr64, get_i2s_fmt(fid, fmt), sbuf)));
+	return (dprint(fid->fd_out,
+		ft_ultoa_ex(ptr64, get_i2s_fmt(fid, fmt), sbuf)));
 }
 
 int	print_arg(t_format_id *fid, va_list args, char *sbuf)
@@ -51,22 +52,22 @@ int	print_arg(t_format_id *fid, va_list args, char *sbuf)
 	if (type == 's')
 		return (print_s(va_arg(args, char *), fid));
 	if (type == 'd' || type == 'i')
-		return (print(ft_itoa_ex(va_arg(args, int),
+		return (dprint(fid->fd_out, ft_itoa_ex(va_arg(args, int),
 					get_i2s_fmt(fid, &fmt), sbuf)));
 	if (type == 'u' || type == 'x' || type == 'X')
-		return (fmt.nbr = va_arg(args, t_uint),
-			print(ft_utoa_ex(fmt.nbr, get_i2s_fmt(fid, &fmt), sbuf)));
+		return (fmt.nbr = va_arg(args, t_uint), dprint(fid->fd_out,
+			ft_utoa_ex(fmt.nbr, get_i2s_fmt(fid, &fmt), sbuf)));
 	if (type == 'p')
 		return (print_p(va_arg(args, uint64_t), fid, &fmt, sbuf));
 	if (type == 'l' || type == 'b')
-		return (print(ft_ltoa_ex(va_arg(args, long),
+		return (dprint(fid->fd_out, ft_ltoa_ex(va_arg(args, long),
 					get_i2s_fmt(fid, &fmt), sbuf)));
 	if (type == 'f')
 		return (print_f(va_arg(args, double), fid, sbuf));
 	if (type == 'F')
-		return (print_cap_f(args, sbuf));
+		return (print_cap_f(fid->fd_out, args, sbuf));
 	if (type == '%')
-		return (write(1, "%", 1));
+		return (write(fid->fd_out, "%", 1));
 	return (0);
 }
 /*	if (type == 'p')
@@ -102,20 +103,8 @@ int	print_arg(t_format_id *fid, va_list args, char *sbuf)
  *		utilisera toujours le car espace, le zero est ignore). Si .precision est
  *		absent alors le padding de min width utilisera le car espace ou le zero.
 */
-int	ft_printf(const char *format, ...)
-{
-	va_list	args;
-	int		count;
 
-	if (format == NULL)
-		return (-1);
-	va_start(args, format);
-	count = ft_vprintf(format, args);
-	va_end(args);
-	return (count);
-}
-
-int	ft_vprintf(const char *format, va_list args)
+int	ft_vdprintf(int fd, const char *format, va_list args)
 {
 	int			count;
 	char		sbuf[PRINTF_ARG_BUFFER_SIZE];
@@ -125,6 +114,7 @@ int	ft_vprintf(const char *format, va_list args)
 
 	if (format == NULL)
 		return (-1);
+	fid.fd_out = fd;
 	count = 0;
 	while (*format)
 	{
@@ -133,7 +123,7 @@ int	ft_vprintf(const char *format, va_list args)
 			format++;
 		new_format_id = (*format == '%');
 		if (format > form0)
-			count += write(1, form0, format - form0);
+			count += write(fd, form0, format - form0);
 		if (new_format_id)
 		{
 			format = parse_format_id(++format, &fid);

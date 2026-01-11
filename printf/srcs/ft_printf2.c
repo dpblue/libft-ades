@@ -19,6 +19,11 @@ int	print(char *str)
 	return (write(1, str, ft_strlen(str)));
 }
 
+int	dprint(int fd, char *str)
+{
+	return (write(fd, str, ft_strlen(str)));
+}
+
 int	print_s(char *str, t_format_id *fid)
 {
 	int	length;
@@ -37,27 +42,27 @@ int	print_s(char *str, t_format_id *fid)
 		length = fid->max_width;
 	padlen = fid->min_width - length;
 	if (fid->left_justify)
-		count += write(1, str, length);
+		count += write(fid->fd_out, str, length);
 	while (padlen-- > 0)
-		count += write(1, " ", 1);
+		count += write(fid->fd_out, " ", 1);
 	if (!fid->left_justify)
-		count += write(1, str, length);
+		count += write(fid->fd_out, str, length);
 	return (count);
 }
 
-int	print_cap_f(va_list args, char *sbuf)
+int	print_cap_f(int fd, va_list args, char *sbuf)
 {
 	const double	nbr = va_arg(args, double);
 	const int		base = va_arg(args, int);
 	const int		nbdigits = va_arg(args, int);
 
-	return (print(ft_ftoa(nbr, base, nbdigits, sbuf)));
+	return (dprint(fd, ft_ftoa(nbr, base, nbdigits, sbuf)));
 }
 
 int	print_f(double nbr, t_format_id *fid, char *sbuf)
 {
 	if (fid->base != 0)
-		return (print(ft_ftoa(nbr, fid->base, fid->precision, sbuf)));
+		return (dprint(fid->fd_out, ft_ftoa(nbr, fid->base, fid->precision, sbuf)));
 	else
-		return (print(ft_ftoa(nbr, 10, fid->precision, sbuf)));
+		return (dprint(fid->fd_out, ft_ftoa(nbr, 10, fid->precision, sbuf)));
 }

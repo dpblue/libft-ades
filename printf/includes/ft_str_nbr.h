@@ -42,6 +42,7 @@ typedef struct s_format_id
 		int	precision;
 	};
 	int		base;			// "flag" 'B'
+	int		fd_out;			// file descriptor for output
 }	t_format_id;
 
 // Format d'affichage pour int2str_ex(), long2str_ex() et ulong2str_ex()
@@ -83,6 +84,7 @@ typedef struct s_format_id
 		int	precision;
 	};
 	int		base;
+	int		fd_out;
 }	t_format_id;
 
 /* Format d'affichage pour int2str_ex(), long2str_ex() et ulong2str_ex()
@@ -114,14 +116,17 @@ void		ft_puterrmsg(char *str);
 
 int			ft_printf(const char *format, ...);
 int			ft_vprintf(const char *format, va_list args);
+int			ft_dprintf(int fd, const char *format, ...);
+int			ft_vdprintf(int fd, const char *format, va_list args);
 int			ft_sprintf(char *buffer, const char *format, ...);
 int			ft_vsprintf(char *buffer, const char *format, va_list args);
 void		test_ft_printf(void);
 // private func:
 
 int			print(char *str);
+int			dprint(int fd, char *str);
 int			print_s(char *str, t_format_id *fid);
-int			print_cap_f(va_list args, char *sbuf);
+int			print_cap_f(int fd, va_list args, char *sbuf);
 int			print_f(double nbr, t_format_id *fid, char *sbuf);
 char		*sprint_f(double nbr, t_format_id *fid, char *sbuf);
 int			print_p(uint64_t ptr64, t_format_id *fid, t_i2s_fmt *fmt,
@@ -193,9 +198,10 @@ char		*dblraw2str(double nbr, char *buf);
 // string processing functions:
 
 //int			ft_strlen(const char *str);
-t_uint		ft_strcpylen(char *dest, const char *src);
+size_t		ft_strcpylen(char *dest, const char *src);
 //t_uint		ft_strlcpy(char *dest, const char *src, unsigned int size);
-t_uint		ft_strlencpy(char *dest, const char *src, unsigned int size);
+size_t		ft_strlencpy(char *dest, const char *src, size_t size);
+size_t		ft_strlcpynum(char *dst, int num, size_t size);
 char		*ft_strncpy(char *dest, const char *src, unsigned int n);
 int			ft_strcmp(const char *s1, const char *s2);
 //int			ft_strncmp(const char *s1, const char *s2, unsigned int n);

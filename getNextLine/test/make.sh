@@ -1,0 +1,1 @@
+cc -Wall -Wextra -Werror -I ../ ../get_next_line.c ../get_next_line_utils.c main.c -o gnl
